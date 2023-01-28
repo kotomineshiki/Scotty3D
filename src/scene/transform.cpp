@@ -15,19 +15,24 @@ Mat4 Transform::local_to_world() const {
 	if (std::shared_ptr< Transform > parent_ = parent.lock()) {
 		//case where transform has a parent
 		//...
+		Mat4 result1 = parent_->local_to_world();
+
+		Mat4 result2= local_to_parent();
+		return result1*result2;
 	}
 	else {
-		//case where transform doesn't have a parent
+		//case where transform doesn't have a parent,should be the local to parent
 		//...
+		return local_to_parent();
 	}
-	return Mat4::I; //<-- wrong, but here so code will compile
+	//return Mat4::I; //<-- wrong, but here so code will compile
 }
 
 Mat4 Transform::world_to_local() const {
 	//A1T1: world_to_local
 	//don't use Mat4::inverse() in your code.
 
-	return Mat4::I; //<-- wrong, but here so code will compile
+	return local_to_world().inverse(); //<-- wrong, but here so code will compile
 }
 
 bool operator!=(const Transform& a, const Transform& b) {
